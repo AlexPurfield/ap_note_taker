@@ -33,7 +33,7 @@ app.get('*', (req, res) => {
 
 //API ROUTES 
 app.get('/api/notes', (req, res) => {
-    fs.readFile('.db/db.json', (err, data) => {
+    fs.readFile(dataBase, (err, data) => {
         if (err) throw err;
         let dbData = JSON.parse(data);
         res.json(dbData)
@@ -41,10 +41,27 @@ app.get('/api/notes', (req, res) => {
 
 })
 
+//POST
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true
+}));
 app.post("/api/notes" , (req,res) => { 
-    res.json(`${req.method} was received`);
-    console.log(`${req.method} was received`);
-})
+console.info(`${req.method} note received`);
+let response;
+if(req.body.text && req.body.title)   {
+    response = {
+        status: 'success',
+        data:req.body,
+    };
+    res.json(`Note added`);
+} else {
+    res.json(`note must have a title and text`);
+}
+const newNote = req.body;
+console.log(newNote);
+});
 
 
 //turn on server
